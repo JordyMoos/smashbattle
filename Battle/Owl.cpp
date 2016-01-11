@@ -6,6 +6,7 @@
 #include "Main.h"
 #include <math.h>
 #include <assert.h>
+#include "SDL/SDL_rotozoom.h"
 
 const int Owl::ANIMATION_SPEED = 6;
 const int Owl::BOMB_AREA_OFFSET = 20;
@@ -23,6 +24,7 @@ Owl::Owl(SDL_Surface * surface, Main &main) : GameplayObject(main), main_(main) 
     hit = false;
     direction = rand() % 2 == 1 ? 1 : -1;
     speedx *= direction;
+    angle = 0;
 
     damage = 100;
 
@@ -49,6 +51,7 @@ Owl::~Owl() {
 
 void Owl::move(Level * level) {
     position->x -= speedx;
+    angle += 6;
 
     Sint16 v = static_cast<Sint16>(cos(((float) main_.gameplay().frame) / 4) * 20 + 20);
     position->y = v;
@@ -73,10 +76,10 @@ void Owl::process() {
     }
 
     // Animate owl
-    if(main_.gameplay().frame - frame_change_start >= ANIMATION_SPEED) {
-        current_frame = current_frame == FRAME_NORMAL ? FRAME_FLASH : FRAME_NORMAL;
-        frame_change_start = main_.gameplay().frame;
-    }
+//    if(main_.gameplay().frame - frame_change_start >= ANIMATION_SPEED) {
+//        current_frame = current_frame == FRAME_NORMAL ? FRAME_FLASH : FRAME_NORMAL;
+//        frame_change_start = main_.gameplay().frame;
+//    }
 
     if (position->x > BOMB_AREA_OFFSET && position->x < WINDOW_WIDTH - BOMB_AREA_OFFSET) {
         if (main_.gameplay().frame % 10 == 0) {
@@ -128,7 +131,8 @@ void Owl::draw_impl(SDL_Surface * screen, int frames_processed) {
     rect.x = position->x;
     rect.y = position->y;
 
-    SDL_BlitSurface(sprite, clip[current_frame], screen, &rect);
+    SDL_Surface * animated = rotozoomSurface(sprite, angle, 1.0, 0);
+    SDL_BlitSurface(animated, clip[current_frame], screen, &rect);
 }
 
 void Owl::set_clips() {

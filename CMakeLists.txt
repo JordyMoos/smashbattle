@@ -21,6 +21,8 @@ add_definitions(-std=c++0x -fpermissive)
 find_package(SDL)
 find_package(SDL_mixer)
 find_package(SDL_net)
+find_package(SDL_gfx REQUIRED)
+
 find_package(ZLIB)
 find_package(CURL)
  
@@ -51,7 +53,7 @@ foreach (_headerFile ${Tests_HEADERS})
 endforeach()
 list(REMOVE_DUPLICATES Tests_INCLUDE_DIRS)
 
-include_directories(${Tests_INCLUDE_DIRS})
+include_directories(${Tests_INCLUDE_DIRS} ${SDLGFX_INCLUDE_DIR})
 
 add_executable (smashbattle_tests ${tests_SOURCES} 
 	#"Battle/states/ServerStateGameStarted.cpp"
@@ -59,7 +61,7 @@ add_executable (smashbattle_tests ${tests_SOURCES}
 )
  
 
-target_link_libraries(smashbattle ${wxWidgets_LIBRARIES} ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_MIXER_LIBRARY} ${SDLNET_LIBRARY} ${SDL_NET_LIBRARY} ${ZLIB_LIBRARIES} ${CURL_LIBRARIES})
+target_link_libraries(smashbattle ${wxWidgets_LIBRARIES} ${SDL_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_MIXER_LIBRARY} ${SDLNET_LIBRARY} ${SDL_NET_LIBRARY} ${SDLGFX_LIBRARY} ${ZLIB_LIBRARIES} ${CURL_LIBRARIES})
 
 install (TARGETS smashbattle DESTINATION /usr/share/games/smashbattle/)
 install (DIRECTORY ${CMAKE_SOURCE_DIR}/Battle/gfx/  DESTINATION /usr/share/games/smashbattle/gfx FILES_MATCHING PATTERN "*")

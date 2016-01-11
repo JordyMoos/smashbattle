@@ -5,6 +5,7 @@
 #define OWL_W 42
 #define OWL_H 36
 
+
 class Owl : public GameplayObject {
 public:
     Owl(Main &main);
@@ -16,6 +17,7 @@ public:
 
     int speedx, speedy;
     bool hit;
+    int angle;
     int direction;
 
     int current_frame;
