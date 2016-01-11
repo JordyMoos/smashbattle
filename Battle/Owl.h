@@ -16,6 +16,7 @@ public:
 
     int speedx, speedy;
     bool hit;
+    int size;
     int direction;
 
     int current_frame;
